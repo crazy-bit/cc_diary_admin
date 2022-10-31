@@ -32,7 +32,7 @@ Page({
             for (var i = 0; i < bills.length; i++) {
                 var d = new Date(bills[i].date);
                 var name = d.getMonth()+1 + "-" + d.getDate() + " | " + bills[i].spend + "元 | " + bills[i].purpose;
-                new_bills.push({'name':name, 'checked':bills[i].claimed, 'value':i});
+                new_bills.push({'name':name, 'claimed':bills[i].claimed, 'value':i});
                 total_spend += bills[i].spend;
             }
             this.setData({bill_list_origin:bills});
@@ -61,9 +61,18 @@ Page({
             year: app.globalData.year,
           }
         }).then((resp) => {
-          console.log("resp", resp)  
+          wx.showToast({
+            title:"提交成功",
+            icon:'success',
+            duration:1500
+          })
         }).catch((e) => {
           console.log(e);
+          wx.showToast({
+            title:"系统异常",
+            icon:'error',
+            duration:2000
+          })
         });
     },
 	
@@ -81,7 +90,7 @@ Page({
 
     OnSubmit(e) {
         for (var i = 0; i < this.data.bill_list.length; i++) {
-            this.data.bill_list_origin[i].claimed = this.data.bill_list[i].checked
+            this.data.bill_list_origin[i].claimed = this.data.bill_list[i].claimed
         }
         this.UpdateToDataBase(this.data)
     },
@@ -90,13 +99,13 @@ Page({
         var claimed = 0
         // 先全部置0
         for (var i  = 0; i < this.data.bill_list.length; i++) {
-            this.data.bill_list[i].checked = false
+            this.data.bill_list[i].claimed = false
         }
         // 再按选择进行置位
         claimed = 0
         for (var i  = 0; i < e.detail.value.length; i++) {
             var index = e.detail.value[i]
-            this.data.bill_list[index].checked = true
+            this.data.bill_list[index].claimed = true
             claimed += this.data.bill_list_origin[index].spend;
         }
         this.setData({claimed_quota:claimed});

@@ -23,7 +23,7 @@
                     <view class="weui-cell__hd">
                         <checkbox
                             class="weui-check"
-                            checked="{{item.checked}}"
+                            checked="{{item.claimed}}"
                             value="{{item.value}}"
                         />
                         <i class="weui-icon-checked"></i>
