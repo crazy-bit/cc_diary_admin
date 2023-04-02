@@ -42,7 +42,9 @@ Page({
             var quota = resp.result.data[0].quota;
             this.setData({cur_quota:quota.cur_year * 10000});
             this.setData({next_year_quota:quota.expect_next_year * 10000});
-            this.setData({left_quota:quota.cur_year * 10000 - total_spend});
+            left = quota.cur_year * 10000 - total_spend
+            if (left < 0) { left = 0 }
+            this.setData({left_quota:left});
         }).catch((e) => {
           console.log(e);
         });
